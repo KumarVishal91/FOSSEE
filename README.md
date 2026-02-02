@@ -86,20 +86,14 @@ Using Pandas for data processing.
 Web (React + Chart.js)
 
 Bar Charts
-
 Pie Charts
-
 Line Charts
-
 Data Tables
-
 Desktop (PyQt5 + Matplotlib)
-
 Embedded Charts
-
 Data Tables
 
-Summary View
+Summary View:
 
 Both frontends consume the same API for consistency.
 
@@ -113,13 +107,9 @@ sample_equipment_data.csv
 Columns:
 
 Equipment Name
-
 Type
-
 Flowrate
-
 Pressure
-
 Temperature
 
 Used for testing and demonstration.
@@ -135,24 +125,11 @@ Django authentication system used
 📄 PDF Report (Optional)
 
 Generates downloadable PDF
-
 Contains:
-
 Summary statistics
-
 Charts
-
 Equipment table
-
 Generated using backend API
-
-🎥 Demo Video
-
-📌 Demo Video Link: (Add your Google Drive / YouTube link here)
-
-🌐 Deployment (Optional)
-
-Web Version: (Add deployment link if available)
 
 🧪 Testing:
 
