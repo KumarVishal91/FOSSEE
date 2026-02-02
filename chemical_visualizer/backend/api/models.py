@@ -7,6 +7,12 @@ class Dataset(models.Model):
 
     file = models.FileField(upload_to='csv/')
 
+    row_count = models.PositiveIntegerField(default=0)
+
+    columns = models.JSONField(default=list)
+
+    data = models.JSONField(default=list)
+
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     summary = models.JSONField()
