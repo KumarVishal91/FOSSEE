@@ -20,6 +20,8 @@ The system uses a common Django REST API backend that processes the data, perfor
 ✅ PDF Report Generation (Optional Feature)
 
 📁 Project Structure
+
+
 <img width="832" height="577" alt="image" src="https://github.com/user-attachments/assets/ae14bd5c-dfae-40c1-9ed6-7dec1817fca7" />
 
 ⚙️ Installation & Setup
@@ -176,7 +178,11 @@ Cross-platform UI testing
 📝 How to Use
 
 1️⃣ Start Django Backend
+
 2️⃣ Run React Web App OR PyQt Desktop App
+
 3️⃣ Upload CSV file
+
 4️⃣ View data table and charts
+
 5️⃣ Download report (optional)
