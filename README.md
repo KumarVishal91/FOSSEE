@@ -26,22 +26,12 @@ The system uses a common Django REST API backend that processes the data, perfor
 
 ⚙️ Installation & Setup
 🔹 Prerequisites
-
-Make sure you have installed:
-
 Python 3.8+
-
 Node.js
-
 npm
-
 Git
 
 🔸 Backend Setup (Django)
-cd backend
-python -m venv venv
-venv\Scripts\activate   # Windows
-# source venv/bin/activate   # Linux/Mac
 
 pip install -r requirements.txt
 
@@ -56,13 +46,10 @@ http://127.0.0.1:8000/
 
 🔸 Web Frontend Setup (React)
 cd web-frontend
-
 npm install
 npm start
 
-
 Web app runs on:
-
 http://localhost:3000/
 
 🔸 Desktop App Setup (PyQt5)
@@ -167,7 +154,7 @@ Generated using backend API
 
 Web Version: (Add deployment link if available)
 
-🧪 Testing
+🧪 Testing:
 
 Manual testing for file upload
 
@@ -175,7 +162,7 @@ API tested using Postman
 
 Cross-platform UI testing
 
-📝 How to Use
+📝 How to Use:
 
 1️⃣ Start Django Backend
 
