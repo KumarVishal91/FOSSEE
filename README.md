@@ -150,3 +150,5 @@ Cross-platform UI testing
 4️⃣ View data table and charts
 
 5️⃣ Download report (optional)
+
+Web app: http://localhost:3000
