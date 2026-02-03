@@ -1,30 +1,104 @@
-📊 Chemical Equipment Parameter Visualizer
-Hybrid Web + Desktop Application
+# Chemical Equipment Parameter Visualizer - Backend API
 
-📌 Project Overview
+Django REST Framework backend for chemical equipment data analysis.
 
-The Chemical Equipment Parameter Visualizer is a hybrid application developed using Django, React, and PyQt5. It allows users to upload CSV files containing chemical equipment parameters and visualize the data through interactive charts and tables on both Web and Desktop platforms.
-The system uses a common Django REST API backend that processes the data, performs analytics using Pandas, and serves the results to both frontends.
+## Features
+- CSV file upload and parsing
+- Data validation and cleaning
+- Summary statistics (totals, averages, min/max, distributions)
+- Last 5 datasets history
+- PDF report generation
+- Basic authentication
+- RESTful API endpoints
 
-🚀 Key Features:
+## Tech Stack
+- Django 6.0
+- Django REST Framework
+- Pandas (data processing)
+- ReportLab (PDF generation)
+- SQLite database
 
-✅ Upload CSV files from Web and Desktop applications
-✅ Parse and analyze data using Pandas
-✅ Display equipment details in tabular format
-✅ Generate interactive charts (Chart.js & Matplotlib)
-✅ Summary statistics (count, averages, distributions)
-✅ Store last 5 uploaded datasets (SQLite)
-✅ RESTful API using Django REST Framework
-✅ Basic Authentication 
-✅ PDF Report Generation 
+## Setup
 
-📁 Project Structure
+### Quick Setup (Default Admin)
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py create_default_user
+python manage.py runserver
+```
 
+Default credentials: **username:** `admin` | **password:** `admin123`
 
+### Custom Admin Setup
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+```
 
-<img width="832" height="577" alt="image" src="https://github.com/user-attachments/assets/ae14bd5c-dfae-40c1-9ed6-7dec1817fca7" />
+## API Endpoints
 
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/upload/` | Upload CSV file | Yes |
+| GET | `/api/history/` | Get last 5 datasets | Yes |
+| GET | `/api/datasets/latest/` | Get latest dataset | Yes |
+| GET | `/api/datasets/<id>/` | Get dataset by ID | Yes |
+| GET | `/api/report/<id>/` | Download PDF report | Yes |
 
+## CSV Format
 
+Required columns:
+- Equipment Name
+- Type
+- Flowrate (numeric)
+- Pressure (numeric)
+- Temperature (numeric)
 
-Web app: http://localhost:3000
+Example:
+```csv
+Equipment Name,Type,Flowrate,Pressure,Temperature
+Pump A,Pump,120.5,3.2,65
+Reactor 1,Reactor,80.0,5.8,120
+```
+
+## Environment Variables
+
+Optional configuration via `.env` file:
+```bash
+DJANGO_SECRET_KEY=your-secret-key
+DJANGO_DEBUG=true
+DJANGO_ALLOWED_HOSTS=127.0.0.1,localhost
+DJANGO_CORS_ORIGINS=http://localhost:3000
+DJANGO_CSRF_TRUSTED_ORIGINS=http://localhost:3000
+```
+
+## Running Tests
+
+```bash
+python manage.py test
+```
+
+## Database
+
+SQLite is used by default. The database file `db.sqlite3` stores:
+- Uploaded datasets (last 5 only)
+- CSV file data
+- Summary statistics
+- User accounts
+
+## Deployment
+
+The project includes `Procfile`, `render.yaml`, and production-ready settings for deployment to Render.
+
+### Quick Deploy to Render
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/KumarVishal91/FOSSEE)
+
+See [DEPLOY_RENDER.md](DEPLOY_RENDER.md) for detailed deployment instructions.
