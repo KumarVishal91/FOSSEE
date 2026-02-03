@@ -95,4 +95,10 @@ SQLite is used by default. The database file `db.sqlite3` stores:
 
 ## Deployment
 
-The project includes `Procfile` and production-ready settings for deployment to platforms like Render or Heroku.
+The project includes `Procfile`, `render.yaml`, and production-ready settings for deployment to Render.
+
+### Quick Deploy to Render
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/KumarVishal91/FOSSEE)
+
+See [DEPLOY_RENDER.md](DEPLOY_RENDER.md) for detailed deployment instructions.
