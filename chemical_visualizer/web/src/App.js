@@ -179,6 +179,14 @@ function App() {
           <p>{currentDataset?.summary?.total ?? 0}</p>
         </div>
         <div className="summary-card">
+          <h3>Total Uploaded</h3>
+          <p>{currentDataset?.summary?.total_raw ?? 0}</p>
+        </div>
+        <div className="summary-card">
+          <h3>Invalid Rows</h3>
+          <p>{currentDataset?.summary?.invalid_rows ?? 0}</p>
+        </div>
+        <div className="summary-card">
           <h3>Avg Flowrate</h3>
           <p>{currentDataset?.summary?.avg_flow?.toFixed(2) ?? '-'}</p>
         </div>

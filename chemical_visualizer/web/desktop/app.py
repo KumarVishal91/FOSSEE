@@ -61,6 +61,9 @@ class MainWindow(QMainWindow):
 
 		self.status_label = QLabel("Ready")
 		self.summary_label = QLabel("No dataset loaded.")
+		self.summary_label.setWordWrap(True)
+		self.stats_label = QLabel("")
+		self.stats_label.setWordWrap(True)
 		self.history_list = QListWidget()
 		self.table = QTableWidget(0, 0)
 
@@ -90,6 +93,7 @@ class MainWindow(QMainWindow):
 
 		right_layout = QVBoxLayout()
 		right_layout.addWidget(self.summary_label)
+		right_layout.addWidget(self.stats_label)
 		right_layout.addWidget(self.chart)
 		right_layout.addWidget(self.table)
 
@@ -195,9 +199,20 @@ class MainWindow(QMainWindow):
 			" | ".join(
 				[
 					f"Total: {summary.get('total', 0)}",
+					f"Total Uploaded: {summary.get('total_raw', summary.get('total', 0))}",
+					f"Invalid Rows: {summary.get('invalid_rows', 0)}",
+				]
+			)
+		)
+		self.stats_label.setText(
+			" | ".join(
+				[
 					f"Avg Flowrate: {summary.get('avg_flow', 0):.2f}",
 					f"Avg Pressure: {summary.get('avg_pressure', 0):.2f}",
 					f"Avg Temp: {summary.get('avg_temp', 0):.2f}",
+					f"Flow Min/Max: {summary.get('min_flow', 0):.2f}/{summary.get('max_flow', 0):.2f}",
+					f"Pressure Min/Max: {summary.get('min_pressure', 0):.2f}/{summary.get('max_pressure', 0):.2f}",
+					f"Temp Min/Max: {summary.get('min_temp', 0):.2f}/{summary.get('max_temp', 0):.2f}",
 				]
 			)
 		)

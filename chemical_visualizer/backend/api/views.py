@@ -22,12 +22,24 @@ REQUIRED_COLUMNS = [
 ]
 
 
-def _build_summary(df: pd.DataFrame) -> dict:
+def _safe_float(value) -> float:
+    return float(value) if pd.notna(value) else 0.0
+
+
+def _build_summary(df: pd.DataFrame, total_raw: int, invalid_rows: int) -> dict:
     return {
         "total": int(len(df)),
-        "avg_flow": float(df["Flowrate"].mean()),
-        "avg_pressure": float(df["Pressure"].mean()),
-        "avg_temp": float(df["Temperature"].mean()),
+        "total_raw": int(total_raw),
+        "invalid_rows": int(invalid_rows),
+        "avg_flow": _safe_float(df["Flowrate"].mean()),
+        "avg_pressure": _safe_float(df["Pressure"].mean()),
+        "avg_temp": _safe_float(df["Temperature"].mean()),
+        "min_flow": _safe_float(df["Flowrate"].min()),
+        "max_flow": _safe_float(df["Flowrate"].max()),
+        "min_pressure": _safe_float(df["Pressure"].min()),
+        "max_pressure": _safe_float(df["Pressure"].max()),
+        "min_temp": _safe_float(df["Temperature"].min()),
+        "max_temp": _safe_float(df["Temperature"].max()),
         "type_dist": df["Type"].value_counts().to_dict(),
     }
 
@@ -43,24 +55,26 @@ class UploadCSV(APIView):
 
         # Read CSV
         try:
-            df = pd.read_csv(file)
+            raw_df = pd.read_csv(file)
         except Exception:
             return Response({"error": "Invalid CSV file"}, status=400)
 
-        missing = [col for col in REQUIRED_COLUMNS if col not in df.columns]
+        missing = [col for col in REQUIRED_COLUMNS if col not in raw_df.columns]
         if missing:
             return Response(
                 {"error": "Missing required columns", "missing": missing},
                 status=400,
             )
 
-        df = df[REQUIRED_COLUMNS].copy()
+        df = raw_df[REQUIRED_COLUMNS].copy()
         df["Flowrate"] = pd.to_numeric(df["Flowrate"], errors="coerce")
         df["Pressure"] = pd.to_numeric(df["Pressure"], errors="coerce")
         df["Temperature"] = pd.to_numeric(df["Temperature"], errors="coerce")
         df = df.dropna(subset=["Flowrate", "Pressure", "Temperature", "Type"])
 
-        summary = _build_summary(df)
+        total_raw = int(len(raw_df))
+        invalid_rows = total_raw - int(len(df))
+        summary = _build_summary(df, total_raw, invalid_rows)
 
         file.seek(0)
         dataset = Dataset.objects.create(
@@ -134,15 +148,32 @@ class DatasetReport(APIView):
         pdf.drawString(1 * inch, 9.4 * inch, f"Total Records: {dataset.row_count}")
 
         summary = dataset.summary or {}
-        pdf.drawString(1 * inch, 8.9 * inch, f"Average Flowrate: {summary.get('avg_flow', 0):.2f}")
-        pdf.drawString(1 * inch, 8.6 * inch, f"Average Pressure: {summary.get('avg_pressure', 0):.2f}")
-        pdf.drawString(1 * inch, 8.3 * inch, f"Average Temperature: {summary.get('avg_temp', 0):.2f}")
+        pdf.drawString(
+            1 * inch,
+            8.9 * inch,
+            f"Average Flowrate: {summary.get('avg_flow', 0):.2f} (Min: {summary.get('min_flow', 0):.2f}, Max: {summary.get('max_flow', 0):.2f})",
+        )
+        pdf.drawString(
+            1 * inch,
+            8.6 * inch,
+            f"Average Pressure: {summary.get('avg_pressure', 0):.2f} (Min: {summary.get('min_pressure', 0):.2f}, Max: {summary.get('max_pressure', 0):.2f})",
+        )
+        pdf.drawString(
+            1 * inch,
+            8.3 * inch,
+            f"Average Temperature: {summary.get('avg_temp', 0):.2f} (Min: {summary.get('min_temp', 0):.2f}, Max: {summary.get('max_temp', 0):.2f})",
+        )
+        pdf.drawString(
+            1 * inch,
+            8.0 * inch,
+            f"Invalid Rows: {summary.get('invalid_rows', 0)} | Total Uploaded: {summary.get('total_raw', dataset.row_count)}",
+        )
 
         pdf.setFont("Helvetica-Bold", 12)
-        pdf.drawString(1 * inch, 7.8 * inch, "Type Distribution")
+        pdf.drawString(1 * inch, 7.5 * inch, "Type Distribution")
         pdf.setFont("Helvetica", 11)
 
-        y = 7.5 * inch
+        y = 7.2 * inch
         for equipment_type, count in (summary.get("type_dist") or {}).items():
             pdf.drawString(1 * inch, y, f"{equipment_type}: {count}")
             y -= 0.25 * inch
