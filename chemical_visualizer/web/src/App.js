@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import axios from 'axios';
 import {
   BarElement,
@@ -33,28 +33,28 @@ function App() {
     [username, password]
   );
 
-  const fetchHistory = async () => {
+  const fetchHistory = useCallback(async () => {
     try {
       const response = await axios.get(`${API_URL}/history/`, authConfig);
       setHistory(response.data);
     } catch (error) {
       setStatus('Unable to fetch history. Check credentials and backend.');
     }
-  };
+  }, [authConfig]);
 
-  const fetchLatest = async () => {
+  const fetchLatest = useCallback(async () => {
     try {
       const response = await axios.get(`${API_URL}/datasets/latest/`, authConfig);
       setCurrentDataset(response.data);
     } catch (error) {
       // ignore if empty
     }
-  };
+  }, [authConfig]);
 
   useEffect(() => {
     fetchHistory();
     fetchLatest();
-  }, [authConfig]);
+  }, [fetchHistory, fetchLatest]);
 
   const handleUpload = async () => {
     if (!selectedFile) {
